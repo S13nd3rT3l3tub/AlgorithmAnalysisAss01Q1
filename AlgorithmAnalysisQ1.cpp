@@ -3,9 +3,19 @@
 
 #include <iostream>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+int main(int argc, char* argv[]) {
+	if (argc < 4) {
+		std::cout << "Usage: " << argv[0] << " <datafile_hospital> <datafile_residents> <hospital capacity(int)>\n";
+	}
+	else if (argc == 4) {
+		<Problem data type> _problem{ argv[1], argv[2], argv[3] };
+		<Algorithm data type> _algorithm{ problem };
+		_algorithm.match();
+	}
+	else {
+		std::cout << "Too many arguments given!\n";
+		std::cout << "Usage: " << argv[0] << " <datafile_hospital> <datafile_residents> <hospital capacity(int)>\n";
+	}
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
