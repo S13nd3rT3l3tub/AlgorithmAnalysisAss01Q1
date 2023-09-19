@@ -25,7 +25,7 @@ void AlgorithmProblem::Init(){
 
 void AlgorithmProblem::read_hospital_file(std::string hospital_filepath)
 {
-	int index{ 0 };
+	int index{ 1 };
 
 	std::ifstream hos_file;
 	hos_file.open(hospital_filepath);
@@ -38,7 +38,7 @@ void AlgorithmProblem::read_hospital_file(std::string hospital_filepath)
 			std::vector<int>(std::istream_iterator<int>(iss),
 				std::istream_iterator<int>()));
 
-		HospitalCapacity[index] = std::vector<int>{};
+		HospitalCapacity.emplace(index, std::vector<int>{});
 		++index;
 	}
 
@@ -47,7 +47,7 @@ void AlgorithmProblem::read_hospital_file(std::string hospital_filepath)
 
 void AlgorithmProblem::read_residents_file(std::string residences_filepath)
 {
-	int index{ 0 };
+	int index{ 1 };
 
 	std::ifstream res_file;
 	res_file.open(residences_filepath);
@@ -59,7 +59,9 @@ void AlgorithmProblem::read_residents_file(std::string residences_filepath)
 		Residents.emplace(index, 
 			std::vector<int>(std::istream_iterator<int>(iss),
 				std::istream_iterator<int>()));
-
+		// ResidentsPreference.emplace(index, 
+		// 	std::vector<int>(std::istream_iterator<int>(iss),
+		// 		std::istream_iterator<int>()));
 		FreeResidents.push_back(index);
 		++index;
 	}
@@ -71,6 +73,8 @@ void AlgorithmProblem::printValues(){
 	printValues(this->Hospitals);
 	std::cout << std::endl;
 	printValues(this->Residents);
+    //std::cout << std::endl;
+    //printValues(this->ResidentsPreference);
 }
 
 void AlgorithmProblem::printValues(std::unordered_map<int, std::vector<int>> input)

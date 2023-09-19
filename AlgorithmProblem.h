@@ -12,7 +12,7 @@ public:
 	std::unordered_map<int, std::vector<int>>	Hospitals,
 												HospitalCapacity,
 												Residents,
-												ResidentsPreference,
+												//ResidentsPreference,
 												Results;
 	std::vector<int> FreeResidents;
 	int maxCapacity;

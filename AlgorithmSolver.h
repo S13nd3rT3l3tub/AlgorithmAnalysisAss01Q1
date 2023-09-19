@@ -2,16 +2,18 @@
 #define ALGORITHMSOLVER
 
 #include <vector>
+#include <unordered_map>
 
 #include "AlgorithmProblem.h"
 
 class AlgorithmSolver {
 private:
-	std::vector<std::vector<int>> MatchResults;
+	std::unordered_map<int, std::vector<int>> MatchResults;
 
 	AlgorithmProblem* problem;
 	int FindIndex(std::vector<int> _container, int _value);
-	void RemoveValueFromList(std::vector<int> _container, int _value);
+    bool ContainerHasValue(std::vector<int> _container, int _value);
+	void RemoveValueFromList(std::vector<int>& _container, int _value);
 	bool CompareResidencyOverHospital(int _hospital, int _resident1, int _resident2);
 public:
 	AlgorithmSolver();
