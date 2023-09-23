@@ -77,37 +77,6 @@ int AlgorithmSolver::FindLeastPreferredCandidate(int hospital)
 }
 
 void AlgorithmSolver::RunSolver() {
-	// while (problem->FreeResidents.size() > 0){
-	// 	int residentIndex{problem->FreeResidents.front()};
-	// 	bool matchFlag{false};
-	// 	while(problem->Residents[residentIndex].size() != 0 && matchFlag == false){
-	// 		int prefHospitalIndex{problem->Residents[residentIndex].front()};
-	// 		problem->Residents[residentIndex].erase(problem->Residents[residentIndex].begin());
-	// 		if (problem->HospitalCapacity[prefHospitalIndex].size() < problem->maxCapacity){
-	// 			problem->HospitalCapacity[prefHospitalIndex].emplace_back(residentIndex);
-	// 			problem->FreeResidents.erase(problem->FreeResidents.begin());
-	// 			matchFlag = true;
-	// 		}
-	// 		else{
-	// 			for (int j{0}; j < problem->Hospitals[prefHospitalIndex].size(); ++j){
-	// 				int competingResidentIndex{problem->Hospitals[prefHospitalIndex][j]};
-	// 				if (CompareResidencyOverHospital(prefHospitalIndex, residentIndex, competingResidentIndex)){
-	// 					// Remove
-	// 					problem->HospitalCapacity[prefHospitalIndex].erase(std::find(problem->HospitalCapacity[prefHospitalIndex].begin(), problem->HospitalCapacity[prefHospitalIndex].end(), competingResidentIndex));
-	// 					problem->HospitalCapacity[prefHospitalIndex].emplace_back(residentIndex);
-	// 					problem->FreeResidents.erase(problem->FreeResidents.begin());
-	// 					problem->FreeResidents.emplace_back(competingResidentIndex);						
-	// 					matchFlag = true;
-	// 					break;
-	// 				}
-	// 				else{
-	// 					// Do nothing
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
-
     // while there are still candidates still applying for residency
     while(problem->FreeResidents.size() != 0)
     {
@@ -131,7 +100,7 @@ void AlgorithmSolver::RunSolver() {
 				std::cout << "Added resident " <<  residency << " to hospital " << preferableHospital  << std::endl; 
                 // add residency
 				problem->HospitalCapacity[preferableHospital].emplace_back(residency);
-
+				RemoveValueFromList(problem->FreeResidents,residency);
 				matchFlag = true;
 			}
             else
@@ -143,7 +112,7 @@ void AlgorithmSolver::RunSolver() {
                         std::cout << residency << " will Replace\n";
 						RemoveValueFromList(problem->HospitalCapacity[preferableHospital],candidate_to_replace);
 						problem->HospitalCapacity[preferableHospital].emplace_back(residency);
-
+						RemoveValueFromList(problem->FreeResidents,residency);
 						problem->FreeResidents.emplace_back(candidate_to_replace);
 						matchFlag = true;
 						// win
@@ -154,51 +123,14 @@ void AlgorithmSolver::RunSolver() {
                         std::cout << residency << " Lost\n";
 
 					}
-
-
-                /*
-				// already have another and capacity is full
-				for(int i{ 0 }; i < problem->HospitalCapacity[preferableHospital].size(); ++i)
-                {
-					int versusResidency{ problem->HospitalCapacity[preferableHospital][i] };
-                    
-                    
-                    std::cout << "Comparing resident " << residency << " to resident " << versusResidency << " in hospital " << preferableHospital << ",    " ;
-					if(CompareResidencyOverHospital(preferableHospital,residency,versusResidency))
-                    {
-						// change operation
-                        std::cout << residency << " will Replace\n";
-						RemoveValueFromList(problem->HospitalCapacity[preferableHospital],versusResidency);
-						problem->HospitalCapacity[preferableHospital].emplace_back(residency);
-
-						problem->FreeResidents.emplace_back(versusResidency);
-						matchFlag = true;
-						// win
-						break;
-					}
-                    else
-                    {
-                        std::cout << residency << " Lost\n";
-
-					}
-				}
-                */
 			}
 		}
 
-        RemoveValueFromList(problem->FreeResidents,residency);
-	}
-
-	// for (int hospitalIndex{0}; hospitalIndex < problem->HospitalCapacity.size(); ++hospitalIndex){
-	// 	MatchResults.emplace_back(std::vector<int>{});
-	// 	for (int i{0}; i < problem->HospitalCapacity[hospitalIndex].size(); ++i)
-	// 		MatchResults[hospitalIndex].emplace_back(problem->HospitalCapacity[hospitalIndex][i]);
-	// }	
-    for(int i{ 0 }; i < problem->HospitalCapacity.size(); ++i){
-		for(int j{0}; j < problem->HospitalCapacity[i].size(); ++j){
-			MatchResults[i].emplace_back(problem->HospitalCapacity[i][j]);	
-		}
-	}
+        if (problem->Residents[residency].size() == 0 && !matchFlag)
+            RemoveValueFromList(problem->FreeResidents,residency);
+	
+        OutputResult();
+    }
 }
     
 
@@ -209,15 +141,24 @@ std::string to_format(const int number) {
 }
 
 void AlgorithmSolver::OutputResult(){
-	for (int i{0}; i < MatchResults.size(); ++i){
+	// for (int i{0}; i < problem->HospitalCapacity.size(); ++i){
 
-        std::cout << "Hospital " << i+1 << " ------- Residences:"; 
+    //     std::cout << "Hospital " << i << " ------- Residences:"; 
 
-		for (int j{0}; j < MatchResults[i].size(); ++j){
-			if (j != MatchResults[i].size() - 1)
-				std::cout << to_format(MatchResults[i][j]) << " ";
+	// 	for (int j{0}; j < problem->HospitalCapacity[i].size(); ++j){
+	// 		if (j != problem->HospitalCapacity[i].size() - 1)
+	// 			std::cout << to_format(problem->HospitalCapacity[i][j]) << " ";
+	// 		else
+	// 			std::cout << to_format(problem->HospitalCapacity[i][j]) << std::endl;
+	// 	}
+	// }
+    for (auto it{problem->HospitalCapacity.begin()}; it != problem->HospitalCapacity.end(); ++it){
+        std::cout << "Hospital " << it->first <<  " ------- Residences:"; 
+        for (int j{0}; j < it->second.size(); ++j){
+			if (j != it->second.size() - 1)
+				std::cout << to_format(it->second[j]) << " ";
 			else
-				std::cout << to_format(MatchResults[i][j]) << std::endl;
+				std::cout << to_format(it->second[j]) << std::endl;
 		}
-	}
+    }
 }

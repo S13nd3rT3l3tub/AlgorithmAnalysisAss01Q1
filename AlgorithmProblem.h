@@ -2,18 +2,18 @@
 #define ALGORITHMPROBLEM
 
 #include <vector>
-#include <unordered_map>
+#include <map>
 #include <string>
 
 class AlgorithmProblem {
 public:
 	std::string hospital_data_filepath,
 				residence_data_filepath;
-	std::unordered_map<int, std::vector<int>>	Hospitals,
-												HospitalCapacity,
-												Residents,
-												//ResidentsPreference,
-												Results;
+	std::map<int, std::vector<int>>	Hospitals,
+                                            HospitalCapacity,
+                                            Residents,
+                                            //ResidentsPreference,
+                                            Results;
 	std::vector<int> FreeResidents;
 	int maxCapacity;
 
@@ -22,7 +22,7 @@ public:
 	void read_hospital_file(std::string hospital_filepath);
 	void read_residents_file(std::string residences_filepath);
 	void printValues();
-	void printValues(std::unordered_map<int, std::vector<int>> input);
+	void printValues(std::map<int, std::vector<int>> input);
 	std::string to_format(const int number);
 };
 

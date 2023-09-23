@@ -77,18 +77,27 @@ void AlgorithmProblem::printValues(){
     //printValues(this->ResidentsPreference);
 }
 
-void AlgorithmProblem::printValues(std::unordered_map<int, std::vector<int>> input)
+void AlgorithmProblem::printValues(std::map<int, std::vector<int>> input)
 {
-	for (int i = 0; i < input.size(); i++)
-	{
-		for (int j = 0; j < input[i].size(); j++)
-		{
-			if (j != (input[i].size() - 1))
-				std::cout << to_format(input[i][j]) << " ";
+	// for (int i = 0; i < input.size(); i++)
+	// {
+	// 	for (int j = 0; j < input[i].size(); j++)
+	// 	{
+	// 		if (j != (input[i].size() - 1))
+	// 			std::cout << to_format(input[i][j]) << " ";
+	// 		else
+	// 			std::cout << to_format(input[i][j]) << std::endl;
+	// 	}
+	// }
+
+    for (auto it{input.begin()}; it != input.end(); ++it){
+        for (int j{0};  j < it->second.size();++j){
+            if (j != (it->second.size() - 1))
+				std::cout << to_format(it->second[j]) << " ";
 			else
-				std::cout << to_format(input[i][j]) << std::endl;
-		}
-	}
+				std::cout << to_format(it->second[j]) << std::endl;
+        }
+    }
 }
 
 std::string AlgorithmProblem::to_format(const int number) {

@@ -8,8 +8,6 @@
 
 class AlgorithmSolver {
 private:
-	std::unordered_map<int, std::vector<int>> MatchResults;
-
 	AlgorithmProblem* problem;
 	int FindIndex(std::vector<int> _container, int _value);
     bool ContainerHasValue(std::vector<int> _container, int _value);
