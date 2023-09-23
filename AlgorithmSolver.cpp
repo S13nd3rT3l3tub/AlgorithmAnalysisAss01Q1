@@ -129,7 +129,6 @@ void AlgorithmSolver::RunSolver() {
         if (problem->Residents[residency].size() == 0 && !matchFlag)
             RemoveValueFromList(problem->FreeResidents,residency);
 	
-        OutputResult();
     }
 }
     

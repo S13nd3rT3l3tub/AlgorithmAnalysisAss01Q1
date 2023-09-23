@@ -10,7 +10,7 @@ DIFF_OPTIONS=-y --strip-trailing-cr --suppress-common-lines
 OBJECTS0=AlgorithmSolver.h AlgorithmProblem.h
 DRIVER0=AlgorithmSolver.cpp AlgorithmProblem.cpp main.cpp
 
-INPUT_FILES=data1_hospitals.txt data1_residents.txt
+INPUT_FILES=data0_hospitals.txt data0_residents.txt
 OUTPUT_FILE=output.txt
 CAPACITY=2
 
