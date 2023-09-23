@@ -34,6 +34,9 @@ bool AlgorithmSolver::CompareResidencyOverHospital(int _hospitalIndex, int _resi
 	int resident1PrefIndex{	FindIndex(problem->Hospitals[_hospitalIndex], _resident1) },
 		resident2PrefIndex{ FindIndex(problem->Hospitals[_hospitalIndex], _resident2)};
 
+
+        std::cout << "/t[DEBUG]  incoming : " << _resident1 << "preference : " << resident1PrefIndex << std::endl;
+         std::cout << "/t[DEBUG]  existing : " << _resident2 << "preference : " << resident2PrefIndex << std::endl;
 	if (resident1PrefIndex < resident2PrefIndex)
 		return true;
 	
@@ -81,46 +84,61 @@ void AlgorithmSolver::RunSolver() {
 	// 	}
 	// }
 
-    while(problem->FreeResidents.size() != 0){
+    // while there are still candidates still applying for residency
+    while(problem->FreeResidents.size() != 0)
+    {
 		std::cout << problem->FreeResidents.size() << "	residencies remain.\n";
-		int residency{ problem->FreeResidents.front()};
-		std::cout << "Checking for " << residency << " residency\n";
-		bool matchFlag{ false };
-		while(problem->Residents[residency].size() != 0 && !matchFlag){
+	
+    	int residency{ problem->FreeResidents.front()};
+	
+    	std::cout << "Checking for " << residency << " residency\n";
+	
+    	bool matchFlag{ false };
+
+
+		while(problem->Residents[residency].size() != 0 && !matchFlag)
+        {
 			int preferableHospital{ problem->Residents[residency].front()};
 			RemoveValueFromList(problem->Residents[residency],preferableHospital);
-			//std::cout << "Compare: " << problem->HospitalCapacity[preferableHospital].size() <<  " < " << problem->maxCapacity  << std::endl;
-            if((problem->HospitalCapacity[preferableHospital].size() < problem->maxCapacity )){
+            
+            if((problem->HospitalCapacity[preferableHospital].size() < problem->maxCapacity ))
+            {
 				std::cout << "Added resident " <<  residency << " to hospital " << preferableHospital  << std::endl; 
                 // add residency
 				problem->HospitalCapacity[preferableHospital].emplace_back(residency);
-				//RemoveValueFromList(problem->FreeResidents,residency);
+
 				matchFlag = true;
-			}else{
+			}
+            else
+            {
 				// already have another and capacity is full
-				for(int i{ 0 }; i < problem->HospitalCapacity[preferableHospital].size(); ++i){
+				for(int i{ 0 }; i < problem->HospitalCapacity[preferableHospital].size(); ++i)
+                {
 					int versusResidency{ problem->HospitalCapacity[preferableHospital][i] };
+                    
+                    
                     std::cout << "Comparing resident " << residency << " to resident " << versusResidency << " in hospital " << preferableHospital <<std::endl;
-					if(CompareResidencyOverHospital(preferableHospital,residency,versusResidency)){
+					if(CompareResidencyOverHospital(preferableHospital,residency,versusResidency))
+                    {
 						// change operation
                         std::cout << "Replace\n";
 						RemoveValueFromList(problem->HospitalCapacity[preferableHospital],versusResidency);
 						problem->HospitalCapacity[preferableHospital].emplace_back(residency);
-					    //RemoveValueFromList(problem->FreeResidents,residency);
+
 						problem->FreeResidents.emplace_back(versusResidency);
 						matchFlag = true;
 						// win
 						break;
-					}else{
+					}
+                    else
+                    {
                         std::cout << "Lost\n";
-						// lose
-                        //RemoveValueFromList(problem->FreeResidents,residency);
+
 					}
 				}
 			}
 		}
         RemoveValueFromList(problem->FreeResidents,residency);
-        //break;
 	}
 
 	// for (int hospitalIndex{0}; hospitalIndex < problem->HospitalCapacity.size(); ++hospitalIndex){
