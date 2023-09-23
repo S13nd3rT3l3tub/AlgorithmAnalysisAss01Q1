@@ -15,6 +15,7 @@ private:
     bool ContainerHasValue(std::vector<int> _container, int _value);
 	void RemoveValueFromList(std::vector<int>& _container, int _value);
 	bool CompareResidencyOverHospital(int _hospital, int _resident1, int _resident2);
+    int FindLeastPreferredCandidate(int hospital);
 public:
 	AlgorithmSolver();
 	~AlgorithmSolver();
