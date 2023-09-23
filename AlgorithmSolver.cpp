@@ -57,23 +57,33 @@ int AlgorithmSolver::FindLeastPreferredCandidate(int hospital)
     // get the current candidates BEFORE REPLACING
     auto curr_cand_vect = problem->HospitalCapacity[hospital];
 
-    int to_replace = -1;
+    std::cout << "at hospital " << hospital << " there are ";
+    for(int i = 0; i <curr_cand_vect.size(); i++ ) 
+    {
+        std::cout << curr_cand_vect[i] << " ";
+    }
+    std::cout << std::endl;
+
+    int idx_to_replace = -1;
+    int candidate_to_replace;
 
     for(int i = 0; i < curr_cand_vect.size(); ++i)
     {
-        int candidate = curr_cand_vect[i];
+        int shortlisted = curr_cand_vect[i];
         for(int j = 0; j< pref_vect.size(); ++j)
         {
-            if(pref_vect[j] == candidate)
+            if(pref_vect[j] == shortlisted)
             {
-                if(j > to_replace)
+                if(j > idx_to_replace)
                 {
-                    to_replace = candidate;
+                    idx_to_replace = j;
+                    candidate_to_replace = pref_vect[j];
                 }
+                break;
             }
         }
     }
-    return to_replace;
+    return candidate_to_replace;
 }
 
 void AlgorithmSolver::RunSolver() {
@@ -84,7 +94,7 @@ void AlgorithmSolver::RunSolver() {
 	
     	int residency{ problem->FreeResidents.front()};
 	
-    	std::cout << "Checking for " << residency << " residency";
+    	std::cout << "Checking for " << residency << " residency" << std::endl;
 	
     	bool matchFlag{ false };
 
@@ -92,7 +102,7 @@ void AlgorithmSolver::RunSolver() {
 		while(problem->Residents[residency].size() != 0 && !matchFlag)
         {
 			int preferableHospital{ problem->Residents[residency].front()};
-            std::cout << " at hospital " << preferableHospital << std::endl;
+            //std::cout << " at hospital " << preferableHospital << std::endl;
 			RemoveValueFromList(problem->Residents[residency],preferableHospital);
             
             if((problem->HospitalCapacity[preferableHospital].size() < problem->maxCapacity ))
@@ -109,7 +119,7 @@ void AlgorithmSolver::RunSolver() {
                 if(CompareResidencyOverHospital(preferableHospital,residency,candidate_to_replace))
                     {
 						// change operation
-                        std::cout << residency << " will Replace\n";
+                        std::cout << residency << " will Replace " << candidate_to_replace << "\n";
 						RemoveValueFromList(problem->HospitalCapacity[preferableHospital],candidate_to_replace);
 						problem->HospitalCapacity[preferableHospital].emplace_back(residency);
 						RemoveValueFromList(problem->FreeResidents,residency);
