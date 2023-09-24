@@ -52,20 +52,20 @@ int AlgorithmSolver::FindLeastPreferredCandidate(int hospital) {
     // get the current candidates BEFORE REPLACING
     auto curr_cand_vect = problem->HospitalCapacity[hospital];
 
-    std::cout << "at hospital " << hospital << " there are ";
-    for(int i = 0; i <curr_cand_vect.size(); i++ ) 
-    {
-        std::cout << curr_cand_vect[i] << " ";
-    }
-    std::cout << std::endl;
+    // std::cout << "at hospital " << hospital << " there are ";
+    // for(int i = 0; i < static_cast<int>(curr_cand_vect.size()); i++ ) 
+    // {
+    //     std::cout << curr_cand_vect[i] << " ";
+    // }
+    // std::cout << std::endl;
 
     int idx_to_replace = -1;
     int candidate_to_replace;
 
-    for(int i = 0; i < curr_cand_vect.size(); ++i)
+    for(int i = 0; i < static_cast<int>(curr_cand_vect.size()); ++i)
     {
         int shortlisted = curr_cand_vect[i];
-        for(int j = 0; j< pref_vect.size(); ++j)
+        for(int j = 0; j < static_cast<int>(pref_vect.size()); ++j)
         {
             if(pref_vect[j] == shortlisted)
             {
