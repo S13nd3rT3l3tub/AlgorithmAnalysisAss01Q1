@@ -1,5 +1,6 @@
 // AlgorithmAnalysisQ1.cpp : This file contains the 'main' function. Program execution begins and ends there.
 // g++ main.cpp AlgorithmProblem.cpp AlgorithmSolver.cpp -o main2.exe
+// ./main.exe data2_hospitals.txt data2_residents.txt 4
 #include <iostream>
 
 #include "AlgorithmProblem.h"
