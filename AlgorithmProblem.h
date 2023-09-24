@@ -10,13 +10,11 @@ public:
 	std::string hospital_data_filepath,
 				residence_data_filepath;
 	std::map<int, std::vector<int>>	Hospitals,
-                                            HospitalCapacity,
-                                            Residents,
-                                            //ResidentsPreference,
-                                            Results;
+                                    HospitalCapacity,
+                                    Residents,
+                                    Results;
 	std::vector<int> FreeResidents;
 	int maxCapacity;
-
 	void Load(std::string hospital_filepath, std::string residences_filepath, int _maxCapacity);
 	void Init();
 	void read_hospital_file(std::string hospital_filepath);

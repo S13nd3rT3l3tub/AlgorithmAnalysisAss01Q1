@@ -16,17 +16,15 @@ AlgorithmSolver::~AlgorithmSolver() {
 }
 
 int AlgorithmSolver::FindIndex(std::vector<int> _container, int _value){
-	for (int i{0}; i < _container.size(); ++i)
+	for (int i{0}; i < static_cast<int>(_container.size()); ++i)
 		if (_container[i] == _value)
 			return i;
-	
 	return -1;
 }
 
 bool AlgorithmSolver::ContainerHasValue(std::vector<int> _container, int _value){
     if (std::find(_container.begin(), _container.end(), _value) != _container.end())
         return true;
-
     return false;
 }
 
@@ -34,10 +32,8 @@ bool AlgorithmSolver::CompareResidencyOverHospital(int _hospitalIndex, int _resi
 	int resident1PrefIndex{	FindIndex(problem->Hospitals[_hospitalIndex], _resident1) },
 		resident2PrefIndex{ FindIndex(problem->Hospitals[_hospitalIndex], _resident2)};
 
-
 	if (resident1PrefIndex < resident2PrefIndex)
 		return true;
-	
 	return false;
 }
 
@@ -50,24 +46,18 @@ void AlgorithmSolver::RunSolver(AlgorithmProblem& _problem) {
 	this->RunSolver();
 }
 
-int AlgorithmSolver::FindLeastPreferredCandidate(int hospital)
-{
+int AlgorithmSolver::FindLeastPreferredCandidate(int hospital) {
     // get the preferences
     auto pref_vect = problem->Hospitals[hospital];
     // get the current candidates BEFORE REPLACING
     auto curr_cand_vect = problem->HospitalCapacity[hospital];
-
     int to_replace = -1;
 
-    for(int i = 0; i < curr_cand_vect.size(); ++i)
-    {
+    for(int i = 0; i < static_cast<int>(curr_cand_vect.size()); ++i) {
         int candidate = curr_cand_vect[i];
-        for(int j = 0; j< pref_vect.size(); ++j)
-        {
-            if(pref_vect[j] == candidate)
-            {
-                if(j > to_replace)
-                {
+        for(int j = 0; j < static_cast<int>(pref_vect.size()); ++j) {
+            if(pref_vect[j] == candidate) {
+                if(j > to_replace) {
                     to_replace = candidate;
                 }
             }
@@ -78,57 +68,42 @@ int AlgorithmSolver::FindLeastPreferredCandidate(int hospital)
 
 void AlgorithmSolver::RunSolver() {
     // while there are still candidates still applying for residency
-    while(problem->FreeResidents.size() != 0)
-    {
+    while(problem->FreeResidents.size() != 0) { //n
 		std::cout << problem->FreeResidents.size() << "	residencies remain.\n";
-	
     	int residency{ problem->FreeResidents.front()};
-	
-    	std::cout << "Checking for " << residency << " residency";
-	
     	bool matchFlag{ false };
-
-
-		while(problem->Residents[residency].size() != 0 && !matchFlag)
-        {
+    	std::cout << "Checking for " << residency << " residency";	
+		while(problem->Residents[residency].size() != 0 && !matchFlag) {    //m
 			int preferableHospital{ problem->Residents[residency].front()};
             std::cout << " at hospital " << preferableHospital << std::endl;
-			RemoveValueFromList(problem->Residents[residency],preferableHospital);
-            
-            if((problem->HospitalCapacity[preferableHospital].size() < problem->maxCapacity ))
-            {
+			RemoveValueFromList(problem->Residents[residency],preferableHospital);  // m
+            if((static_cast<int>(problem->HospitalCapacity[preferableHospital].size()) < problem->maxCapacity )) {
 				std::cout << "Added resident " <<  residency << " to hospital " << preferableHospital  << std::endl; 
                 // add residency
-				problem->HospitalCapacity[preferableHospital].emplace_back(residency);
-				RemoveValueFromList(problem->FreeResidents,residency);
+				problem->HospitalCapacity[preferableHospital].emplace_back(residency);  // n
+				RemoveValueFromList(problem->FreeResidents,residency); 
 				matchFlag = true;
 			}
-            else
-            {
-                int candidate_to_replace = FindLeastPreferredCandidate(preferableHospital);
-                if(CompareResidencyOverHospital(preferableHospital,residency,candidate_to_replace))
-                    {
+            else {
+                int candidate_to_replace = FindLeastPreferredCandidate(preferableHospital); // p c
+                if(CompareResidencyOverHospital(preferableHospital,residency,candidate_to_replace)) {   // p
 						// change operation
                         std::cout << residency << " will Replace\n";
-						RemoveValueFromList(problem->HospitalCapacity[preferableHospital],candidate_to_replace);
+						RemoveValueFromList(problem->HospitalCapacity[preferableHospital],candidate_to_replace);    // c
 						problem->HospitalCapacity[preferableHospital].emplace_back(residency);
-						RemoveValueFromList(problem->FreeResidents,residency);
+						RemoveValueFromList(problem->FreeResidents,residency);  //n
 						problem->FreeResidents.emplace_back(candidate_to_replace);
 						matchFlag = true;
 						// win
 						break;
 					}
-                    else
-                    {
+                    else {
                         std::cout << residency << " Lost\n";
-
 					}
 			}
 		}
-
         if (problem->Residents[residency].size() == 0 && !matchFlag)
-            RemoveValueFromList(problem->FreeResidents,residency);
-	
+            RemoveValueFromList(problem->FreeResidents,residency);  // n
     }
 }
     
@@ -139,22 +114,11 @@ std::string to_format(const int number) {
 	return ss.str();
 }
 
-void AlgorithmSolver::OutputResult(){
-	// for (int i{0}; i < problem->HospitalCapacity.size(); ++i){
-
-    //     std::cout << "Hospital " << i << " ------- Residences:"; 
-
-	// 	for (int j{0}; j < problem->HospitalCapacity[i].size(); ++j){
-	// 		if (j != problem->HospitalCapacity[i].size() - 1)
-	// 			std::cout << to_format(problem->HospitalCapacity[i][j]) << " ";
-	// 		else
-	// 			std::cout << to_format(problem->HospitalCapacity[i][j]) << std::endl;
-	// 	}
-	// }
+void AlgorithmSolver::OutputResult() {
     for (auto it{problem->HospitalCapacity.begin()}; it != problem->HospitalCapacity.end(); ++it){
         std::cout << "Hospital " << it->first <<  " ------- Residences:"; 
-        for (int j{0}; j < it->second.size(); ++j){
-			if (j != it->second.size() - 1)
+        for (int j{0}; j < static_cast<int>(it->second.size()); ++j){
+			if (j != (static_cast<int>(it->second.size()) - 1))
 				std::cout << to_format(it->second[j]) << " ";
 			else
 				std::cout << to_format(it->second[j]) << std::endl;

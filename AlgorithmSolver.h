@@ -19,7 +19,6 @@ public:
 	~AlgorithmSolver();
 	void RunSolver(AlgorithmProblem& _problem);
 	void RunSolver();
-
 	void OutputResult();
 };
 
