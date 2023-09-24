@@ -83,25 +83,25 @@ int AlgorithmSolver::FindLeastPreferredCandidate(int hospital) {
 
 void AlgorithmSolver::RunSolver() {
     // while there are still candidates still applying for residency
-    while(problem->FreeResidents.size() != 0) { //n
+    while(problem->FreeResidents.size() != 0) {
 		std::cout << problem->FreeResidents.size() << "	residencies remain.\n";
     	int residency{ problem->FreeResidents.front()};
     	bool matchFlag{ false };
-    	std::cout << "Checking for " << residency << " residency";	
-		while(problem->Residents[residency].size() != 0 && !matchFlag) {    //m
+    	std::cout << "Checking for " << residency << " residency";
+		while(problem->Residents[residency].size() != 0 && !matchFlag) {   
 			int preferableHospital{ problem->Residents[residency].front()};
             std::cout << " at hospital " << preferableHospital << std::endl;
-			RemoveValueFromList(problem->Residents[residency],preferableHospital);  // m
+			RemoveValueFromList(problem->Residents[residency],preferableHospital);  
             if((static_cast<int>(problem->HospitalCapacity[preferableHospital].size()) < problem->maxCapacity )) {
 				std::cout << "Added resident " <<  residency << " to hospital " << preferableHospital  << std::endl; 
                 // add residency
-				problem->HospitalCapacity[preferableHospital].emplace_back(residency);  // n
+				problem->HospitalCapacity[preferableHospital].emplace_back(residency);  
 				RemoveValueFromList(problem->FreeResidents,residency); 
 				matchFlag = true;
 			}
             else {
-                int candidate_to_replace = FindLeastPreferredCandidate(preferableHospital); // p c
-                if(CompareResidencyOverHospital(preferableHospital,residency,candidate_to_replace)) {   // p
+                int candidate_to_replace = FindLeastPreferredCandidate(preferableHospital); 
+                if(CompareResidencyOverHospital(preferableHospital,residency,candidate_to_replace)) { 
 						// change operation
                         std::cout << residency << " will Replace " << candidate_to_replace << "\n";
 						RemoveValueFromList(problem->HospitalCapacity[preferableHospital],candidate_to_replace);
